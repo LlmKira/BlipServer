@@ -1,0 +1,9 @@
+git+https://github.com/pharmapsychotic/BLIP.git
+torch
+torchvision
+loguru
+Pillow
+fastapi
+pydantic
+rtoml
+uvicorn
