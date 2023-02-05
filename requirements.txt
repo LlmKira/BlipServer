@@ -7,3 +7,4 @@ fastapi
 pydantic
 rtoml
 uvicorn
+python-multipart
