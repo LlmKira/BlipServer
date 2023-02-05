@@ -10,17 +10,28 @@ from typing import Union, Optional
 import shutil
 
 import uvicorn
-
+from loguru import logger
 from utils import Blip
 from fastapi import FastAPI, File, UploadFile
 from PIL import Image
 
 CONF = rtoml.load(open("config.toml", 'r'))
+ServerConf = CONF.get("server") if CONF.get("server") else {}
+BlipConf = CONF.get("blip") if CONF.get("blip") else {}
 
-BlipModel = CONF["blip"].get("model")
+if not BlipConf:
+    logger.warning("No BlipConf")
+if not ServerConf:
+    logger.warning("No ServerConf")
+
+AutoReload = ServerConf.get("reload") if ServerConf.get("reload") else False
+ServerHost = ServerConf.get("host") if ServerConf.get("host") else "127.0.0.1"
+ServerPort = ServerConf.get("port") if ServerConf.get("port") else 10885
+
+BlipModel = BlipConf.get("model")
 if BlipModel not in ['large', 'base']:
     BlipModel = 'large'
-BlipConfig = Blip.Config(device=CONF["blip"].get("device"))
+BlipConfig = Blip.Config(device=BlipConf.get("device"))
 BlipConfig.model = BlipModel
 BlipInterrogator = Blip.Interrogator(BlipConfig)
 
@@ -42,4 +53,4 @@ def create_upload_file(file: Optional[UploadFile] = None):
 
 
 if __name__ == '__main__':
-    uvicorn.run('app:app', host='127.0.0.1', port=10885, reload=False, log_level="debug", workers=1)
+    uvicorn.run('app:app', host=ServerHost, port=ServerPort, reload=AutoReload, log_level="debug", workers=1)
