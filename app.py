@@ -55,7 +55,7 @@ def create_upload_file(file: Optional[UploadFile] = None):
 if __name__ == '__main__':
     uvicorn.run('app:app', host=ServerHost, port=ServerPort,
                 reload_delay=5,
-                reload=AutoReload,
+                reload=False,
                 log_level="debug",
                 workers=1
                 )

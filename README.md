@@ -18,5 +18,4 @@ device = "cuda" #or cpu
 [server]
 host = '127.0.0.1'
 port = 10885
-reload = false # should be false!
 ```
