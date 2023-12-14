@@ -3,17 +3,17 @@
 # @FileName: main.py
 # @Software: PyCharm
 # @Github    ：sudoskys
-import rtoml
-from pydantic import BaseModel
-import tempfile
-from typing import Union, Optional
 import shutil
+import tempfile
+from typing import Optional
 
+import rtoml
 import uvicorn
-from loguru import logger
-from utils import Blip
-from fastapi import FastAPI, File, UploadFile
 from PIL import Image
+from fastapi import FastAPI, UploadFile
+from loguru import logger
+
+from utils import Blip
 
 CONF = rtoml.load(open("config.toml", 'r'))
 ServerConf = CONF.get("server") if CONF.get("server") else {}
@@ -28,11 +28,13 @@ AutoReload = ServerConf.get("reload") if ServerConf.get("reload") else False
 ServerHost = ServerConf.get("host") if ServerConf.get("host") else "127.0.0.1"
 ServerPort = ServerConf.get("port") if ServerConf.get("port") else 10885
 
-BlipModel = BlipConf.get("model")
-if BlipModel not in ['large', 'base']:
-    BlipModel = 'large'
+LowVram = BlipConf.get("low_vram_model") if BlipConf.get("low_vram_model") else False
+
 BlipConfig = Blip.Config(device=BlipConf.get("device"))
-BlipConfig.model = BlipModel
+
+if LowVram:
+    BlipConfig.apply_low_vram_defaults()
+
 BlipInterrogator = Blip.Interrogator(BlipConfig)
 
 app = FastAPI()

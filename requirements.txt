@@ -1,6 +1,11 @@
-git+https://github.com/pharmapsychotic/BLIP.git
-torch
+torch>=1.13.0
 torchvision
+Pillow
+requests
+safetensors
+tqdm
+
+transformers>=4.27.1
 loguru
 Pillow
 fastapi

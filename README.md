@@ -2,9 +2,11 @@
 
 ## App
 
-`pip install -r requirements.txt`
-
-`python3 app.py`
+```
+pip install pdm
+pdm install
+pdm run python app.py
+```
 
 ## Config
 
@@ -12,7 +14,7 @@
 
 ```toml
 [blip]
-model = "large" #or base
+low_vram = true
 device = "cuda" #or cpu
 
 [server]

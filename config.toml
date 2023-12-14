@@ -1,6 +1,6 @@
 [blip]
-model = "large" # base
-device = "cuda" # cpu
+low_vram = true
+device = "cpu" # cpu
 
 [server]
 host = '127.0.0.1'
