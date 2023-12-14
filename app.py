@@ -28,7 +28,7 @@ AutoReload = ServerConf.get("reload") if ServerConf.get("reload") else False
 ServerHost = ServerConf.get("host") if ServerConf.get("host") else "127.0.0.1"
 ServerPort = ServerConf.get("port") if ServerConf.get("port") else 10885
 
-LowVram = BlipConf.get("low_vram_model") if BlipConf.get("low_vram_model") else False
+LowVram = BlipConf.get("low_vram") if BlipConf.get("low_vram") else False
 
 BlipConfig = Blip.Config(device=BlipConf.get("device"))
 
