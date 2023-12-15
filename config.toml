@@ -1,6 +1,6 @@
 [blip]
 low_vram = true
-device = "cpu" # cpu
+device = "cpu" # cuda or cpu
 
 [server]
 host = '127.0.0.1'

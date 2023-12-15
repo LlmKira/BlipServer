@@ -3,15 +3,14 @@
 # @FileName: main.py
 # @Software: PyCharm
 # @Github    ：sudoskys
-import shutil
-import tempfile
-from typing import Optional
+import io
 
 import rtoml
 import uvicorn
 from PIL import Image
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, UploadFile, File
 from loguru import logger
+from starlette.responses import JSONResponse
 
 from utils import Blip
 
@@ -41,17 +40,14 @@ app = FastAPI()
 
 
 @app.post("/upload/")
-def create_upload_file(file: Optional[UploadFile] = None):
-    if not file.file:
-        return {"code": 0, "message": "No upload file sent"}
-    else:
-        with tempfile.NamedTemporaryFile(suffix=".png") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-            image_pil = Image.open(buffer.name).convert('RGB')
-        if image_pil:
-            BlipInterrogatorText = BlipInterrogator.generate_caption(
-                pil_image=image_pil)
-            return {"code": 1, "message": BlipInterrogatorText}
+async def create_upload_file(file: UploadFile = File(...)):
+    contents = await file.read()
+    image_pil = Image.open(io.BytesIO(contents)).convert('RGB')
+    if image_pil:
+        blip_interrogator_text = BlipInterrogator.generate_caption(pil_image=image_pil)
+        return JSONResponse(
+            content={"text": blip_interrogator_text}
+        )
 
 
 if __name__ == '__main__':
